@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    tools:context="org.androidtown.movieserch.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/firstLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/horror"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp"
+            android:text="공포"
+            android:onClick ="onClick"/>
+
+        <Button
+            android:id="@+id/SF"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/horror"
+            android:text="SF"
+            android:onClick ="onClick"/>
+
+        <Button
+            android:id="@+id/comedy"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/SF"
+            android:text="코미디" />
+
+        <Button
+            android:id="@+id/romance"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/comedy"
+            android:text="로맨스"
+            android:onClick ="onClick"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_top"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="80dip"
+            android:layout_height="wrap_content"
+            android:hint="이름"
+            android:singleLine="true"
+            />
+
+        <EditText
+            android:id="@+id/et_genre"
+            android:layout_width="80dip"
+            android:layout_height="wrap_content"
+            android:hint="장르"
+            android:singleLine="true"
+            />
+
+        <EditText
+            android:id="@+id/et_story"
+            android:layout_width="80dip"
+            android:layout_height="wrap_content"
+            android:hint="스토리"
+            android:singleLine="true"
+            />
+
+        <Button
+            android:id="@+id/btn_add"
+            android:layout_width="80dip"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="추가"
+            android:onClick="onClick"
+            />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/ll_top"
+        />
+
+</LinearLayout>
