@@ -15,6 +15,5 @@
             </intent-filter>
         </activity>
 
-        <activity android:name =".HorrorActivity"/>
     </application>
 </manifest>

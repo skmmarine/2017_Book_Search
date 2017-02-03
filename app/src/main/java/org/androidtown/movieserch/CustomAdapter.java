@@ -44,7 +44,8 @@ public class CustomAdapter extends BaseAdapter {
 
         if(v == null){
             viewHolder = new ViewHolder();
-            v = inflater.inflate(R.layout.activity_horror, null);
+
+            v = inflater.inflate(R.layout.list_row, null);
             viewHolder.name = (TextView)v.findViewById(R.id.tv_name);
             viewHolder.genre = (TextView)v.findViewById(R.id.tv_genre);
             viewHolder.story = (TextView)v.findViewById(R.id.tv_story);

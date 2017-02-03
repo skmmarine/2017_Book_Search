@@ -1,11 +1,13 @@
 package org.androidtown.movieserch;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -29,14 +31,20 @@ public class MainActivity extends AppCompatActivity {
         mDbOpenHelper = new DbOpenHelper(this);
         mDbOpenHelper.open();
         mDbOpenHelper.deleteAllColumn();
-        mDbOpenHelper.insertColumn("terminate", "SF", "로봇");
         mDbOpenHelper.insertColumn("무서운이야기", "공포", "귀신");
-        
+        mDbOpenHelper.insertColumn("파라노말엑티비티", "공포", "카메라");
+        mDbOpenHelper.insertColumn("terminate", "SF", "로봇");
+        mDbOpenHelper.insertColumn("인터스텔라", "SF", "우주");
+        mDbOpenHelper.insertColumn("맨인블랙","코미디","양복");
+        mDbOpenHelper.insertColumn("너의이름은","로맨스","양복");
+
+
         //mDbOpenHelper.insertColumn("맨인블랙", "코미디", "양복");
         //mDbOpenHelper.insertColumn("말할수없는비밀", "로맨스", "피아노");
 
         mInfoArray = new ArrayList<InfoClass>();
-        doWhileCursorToArray();
+        String first ="all";
+        doWhileCursorToArray(first);
 
         for(InfoClass i : mInfoArray) {
             DLog.d(TAG, "ID = " + i._id);
@@ -79,13 +87,11 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private void doWhileCursorToArray()
+    private void doWhileCursorToArray(String case_str)
     {
         mCursor = null;
         mCursor = mDbOpenHelper.getAllColumns();
-
         DLog.e(TAG, "COUNT = " + mCursor.getCount());
-
         while(mCursor.moveToNext()){
                 mInfoClass = new InfoClass(
                         mCursor.getInt(mCursor.getColumnIndex("_id")),
@@ -93,43 +99,83 @@ public class MainActivity extends AppCompatActivity {
                         mCursor.getString(mCursor.getColumnIndex("genre")),
                         mCursor.getString(mCursor.getColumnIndex("story"))
                 );
-
-           // if("ter".equals(mInfoClass.name))
-                mInfoArray.add(mInfoClass);
+            switch(case_str){
+                //String List[] = {"all","horror","SF","comedy","romance","search"};
+                case "all":
+                    mInfoArray.add(mInfoClass);
+                    break;
+                case "horror":
+                    if("공포".equals(mInfoClass.genre))
+                        mInfoArray.add(mInfoClass);
+                    break;
+                case "SF":
+                    if("SF".equals(mInfoClass.genre))
+                        mInfoArray.add(mInfoClass);
+                    break;
+                case "comedy":
+                    if("코미디".equals(mInfoClass.genre))
+                        mInfoArray.add(mInfoClass);
+                    break;
+                case "romance":
+                    if("로맨스".equals(mInfoClass.genre))
+                        mInfoArray.add(mInfoClass);
+                    break;
+                case "search":
+                    //need to change
+                        mInfoArray.add(mInfoClass);
+                    break;
+                default:
+                    break;
+            }
         }
         mCursor.close();
     }
-
+    /**** default doWhileCursorToArray()*********
+    private void doWhileCursorToArray(){
+        mCursor = null;
+        mCursor = mDbOpenHelper.getAllColumns();
+        DLog.e(TAG, "COUNT = " + mCursor.getCount());
+        while (mCursor.moveToNext()) {
+            mInfoClass = new InfoClass(
+                    mCursor.getInt(mCursor.getColumnIndex("_id")),
+                    mCursor.getString(mCursor.getColumnIndex("name")),
+                    mCursor.getString(mCursor.getColumnIndex("genre")),
+                    mCursor.getString(mCursor.getColumnIndex("story"))
+            );
+            mInfoArray.add(mInfoClass);
+        }
+        mCursor.close();
+    }
+*******************************************************/
     public void onClick(View view) {
+        String List[] = {"all","horror","SF","comedy","romance","search"};
+        mInfoArray.clear();
         switch(view.getId()) {
+            case R.id.allList:
+                doWhileCursorToArray(List[0]);
+                break;
             case R.id.horror:
-                Intent intent = new Intent(this, HorrorActivity.class);
-                startActivity(intent);
+                doWhileCursorToArray(List[1]);
                 break;
             case R.id.SF:
+                doWhileCursorToArray(List[2]);
                 break;
             case R.id.comedy:
+                doWhileCursorToArray(List[3]);
                 break;
             case R.id.romance:
+                doWhileCursorToArray(List[4]);
                 break;
-            case R.id.btn_add:
-
-                mDbOpenHelper.insertColumn(
-                        mEditTexts[Constants.NAME].getText().toString().trim(),
-                        mEditTexts[Constants.GENRE].getText().toString().trim(),
-                        mEditTexts[Constants.STORY].getText().toString().trim()
-                );
-
-                mInfoArray.clear();
-                doWhileCursorToArray();
-                mAdapter.setArrayList(mInfoArray);
-                mAdapter.notifyDataSetChanged();
-                mCursor.close();
+            case R.id.btn_search:
+                doWhileCursorToArray(List[5]);
                 break;
             default:
                 break;
 
         }
+        mAdapter.setArrayList(mInfoArray);
+        mAdapter.notifyDataSetChanged();
+        mCursor.close();
     }
     private EditText[] mEditTexts;
     private ListView mListView;
@@ -140,6 +186,17 @@ public class MainActivity extends AppCompatActivity {
                 (EditText)findViewById(R.id.et_genre),
                 (EditText)findViewById(R.id.et_story)
         };
+        mEditTexts[0].setInputType(0);
+        mEditTexts[0].setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                mEditTexts[0].setInputType(1);
+                InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                mgr.showSoftInput(mEditTexts[0], InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+    
+
         mListView = (ListView) findViewById(R.id.lv_list);
     }
 }
