@@ -75,7 +75,7 @@
 
         <EditText
             android:id="@+id/et_name"
-            android:layout_width="80dip"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:hint="이름"
             android:singleLine="true"
@@ -93,7 +93,7 @@
             android:id="@+id/et_story"
             android:layout_width="80dip"
             android:layout_height="wrap_content"
-            android:hint="스토리"
+            android:hint="키워드"
             android:singleLine="true"
             />
 

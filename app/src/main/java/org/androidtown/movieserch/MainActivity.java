@@ -3,6 +3,7 @@ package org.androidtown.movieserch;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,12 +32,13 @@ public class MainActivity extends AppCompatActivity {
         mDbOpenHelper = new DbOpenHelper(this);
         mDbOpenHelper.open();
         mDbOpenHelper.deleteAllColumn();
-        mDbOpenHelper.insertColumn("무서운이야기", "공포", "귀신");
+        mDbOpenHelper.insertColumn("무서운이야기", "공포", "귀신/옴니버스/납치");
+        mDbOpenHelper.insertColumn("쏘우", "공포", "납치/고어");
         mDbOpenHelper.insertColumn("파라노말엑티비티", "공포", "카메라");
-        mDbOpenHelper.insertColumn("terminate", "SF", "로봇");
-        mDbOpenHelper.insertColumn("인터스텔라", "SF", "우주");
-        mDbOpenHelper.insertColumn("맨인블랙","코미디","양복");
-        mDbOpenHelper.insertColumn("너의이름은","로맨스","양복");
+        mDbOpenHelper.insertColumn("terminate", "SF/스릴러", "로봇/시간여행/존코너");
+        mDbOpenHelper.insertColumn("인터스텔라", "SF", "우주/가족/미래");
+        mDbOpenHelper.insertColumn("맨인블랙","코미디/SF","양복/외계인");
+        mDbOpenHelper.insertColumn("너의이름은","로맨스","애니");
 
 
         //mDbOpenHelper.insertColumn("맨인블랙", "코미디", "양복");
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new CustomAdapter(this, mInfoArray);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemLongClickListener(longClickListener);
+
     }
 
     @Override
@@ -67,13 +70,14 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                        int position, long arg3) {
-
-            DLog.e(TAG, "position = " + position);
-
-            //boolean result = mDbOpenHelper.deleteColumn(position + 1);
+            String name = mInfoArray.get(position).name;
+            String url="https://search.naver.com/search.naver?where=nexearch&query="+name+"&sm=top_hty&fbm=1&ie=utf8";
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
+            //DLog.e("arg1","agr1 = "+arg1);
+            /*
             boolean result =  mDbOpenHelper.deleteColumn(mInfoArray.get(position)._id);
-            DLog.e(TAG, "result = " + result);
-
+            //DLog.e(TAG, "result = " + result);
             if(result){
                 mInfoArray.remove(position);
                 mAdapter.setArrayList(mInfoArray);
@@ -82,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "INDEX를 확인해 주세요.",
                         Toast.LENGTH_LONG).show();
             }
-
+*/
             return false;
         }
     };
@@ -105,23 +109,28 @@ public class MainActivity extends AppCompatActivity {
                     mInfoArray.add(mInfoClass);
                     break;
                 case "horror":
-                    if("공포".equals(mInfoClass.genre))
+                    if("공포".contains(mInfoClass.genre))
                         mInfoArray.add(mInfoClass);
                     break;
                 case "SF":
-                    if("SF".equals(mInfoClass.genre))
+                    if("SF".contains(mInfoClass.genre))
                         mInfoArray.add(mInfoClass);
                     break;
                 case "comedy":
-                    if("코미디".equals(mInfoClass.genre))
+                    if("코미디".contains(mInfoClass.genre))
                         mInfoArray.add(mInfoClass);
                     break;
                 case "romance":
-                    if("로맨스".equals(mInfoClass.genre))
+                    if("로맨스".contains(mInfoClass.genre))
                         mInfoArray.add(mInfoClass);
                     break;
                 case "search":
-                    //need to change
+                    String input_name = mEditTexts[Constants.NAME].getText().toString().trim();
+                    String input_genre = mEditTexts[Constants.GENRE].getText().toString().trim();
+                    String input_story = mEditTexts[Constants.STORY].getText().toString().trim();
+                    if( mInfoClass.name.contains(input_name) &&
+                            mInfoClass.genre.contains(input_genre) &&
+                            mInfoClass.story.contains(input_story))
                         mInfoArray.add(mInfoClass);
                     break;
                 default:
@@ -195,7 +204,6 @@ public class MainActivity extends AppCompatActivity {
                 mgr.showSoftInput(mEditTexts[0], InputMethodManager.SHOW_IMPLICIT);
             }
         });
-    
 
         mListView = (ListView) findViewById(R.id.lv_list);
     }
